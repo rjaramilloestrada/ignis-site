@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="IGNIS">
+  <defs>
+    <linearGradient id="t" x1="0" y1="51" x2="0" y2="13" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#C8313A"></stop>
+      <stop offset="0.5" stop-color="#E8621A"></stop>
+      <stop offset="1" stop-color="#FFD460"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" fill="#1A1612"></rect>
+  <g transform="translate(32 32) scale(0.176) translate(-98 -122)">
+    <polygon points="30,230 70,214 70,90 30,106" fill="url(#t)"></polygon>
+    <polygon points="78,230 118,214 118,14 78,30" fill="url(#t)"></polygon>
+    <polygon points="126,230 166,214 166,110 126,126" fill="url(#t)"></polygon>
+  </g>
+</svg>
