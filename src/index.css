@@ -418,16 +418,43 @@ nav.scrolled {
    Todos quedan en el DOM (SEO/accesibilidad) — se ocultan con CSS. */
 .cases-group { margin-top: 48px; }
 .cases-group-hidden { display: none; }
+/* Entrada del grupo al cambiar de tab (display:none→block reinicia la animación). */
+@media (prefers-reduced-motion: no-preference) {
+  .cases-group { animation: group-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; }
+}
+@keyframes group-in {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: none; }
+}
+.cases-track-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
 .cases-context-label {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.25em;
-  margin-bottom: 16px;
 }
-/* Scroll horizontal nativo con snap — sin flechas, dots ni auto-rotate.
-   La siguiente card "asoma" como affordance de que hay más. */
+.track-controls { display: flex; gap: 8px; }
+.track-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.track-btn:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
+.track-btn:disabled { opacity: 0.3; cursor: default; }
+.track-btn:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; }
+/* Carrusel: scroll-snap nativo + drag con mouse. Sin auto-rotate. */
 .cases-track {
   display: flex;
   gap: 16px;
@@ -436,9 +463,40 @@ nav.scrolled {
   scrollbar-width: none;
 }
 .cases-track::-webkit-scrollbar { display: none; }
-.case-card {
+.cases-track.track-multi { cursor: grab; }
+.cases-track.dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+}
+.cases-track:focus-visible { outline: 1px solid var(--border); outline-offset: 6px; }
+.case-slide {
   flex: 0 0 88%;
   scroll-snap-align: start;
+  display: flex;
+}
+.case-slide:only-child { flex-basis: 100%; }
+/* Card fuera de foco (menos del 55% visible) se atenúa. */
+@media (prefers-reduced-motion: no-preference) {
+  .case-slide { transition: opacity 0.35s ease; }
+  .case-slide.is-off { opacity: 0.45; }
+}
+.track-progress {
+  height: 2px;
+  background: var(--border);
+  margin-top: 20px;
+  overflow: hidden;
+}
+.track-progress-fill {
+  height: 100%;
+  width: 100%;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.15s linear;
+}
+.case-card {
+  width: 100%;
   background: var(--bg);
   display: grid;
   grid-template-columns: 70% 30%;
@@ -446,7 +504,6 @@ nav.scrolled {
   border-left-width: 2px;
   transition: border-color 0.2s ease, background 0.2s ease;
 }
-.cases-track .case-card:only-child { flex-basis: 100%; }
 .case-card:hover { border-left-color: var(--accent); background: #0F0F0F; }
 /* Card sin columna de métricas/beneficios (p. ej. workshops sin cifras). */
 .case-card-solo { grid-template-columns: 1fr; }
@@ -764,8 +821,11 @@ footer {
   #tab-ent { grid-template-columns: 1fr; }
   .process-grid { grid-template-columns: 1fr; }
   .objections-grid { grid-template-columns: 1fr; }
-  .case-card { grid-template-columns: 1fr; flex-basis: 92%; }
+  .case-card { grid-template-columns: 1fr; }
+  .case-slide { flex-basis: 92%; }
   .cases-track { gap: 12px; }
+  .cases-track.track-multi { cursor: default; }
+  .track-controls { display: none; }
   .case-info { padding: 32px; }
   .case-metrics { padding: 32px; border-left: none; border-top: 1px solid var(--border); }
   .hero-content { padding-top: 25vh; }
@@ -783,5 +843,7 @@ footer {
   .nav-links a::after { transition: none; }
   .nav-cta:hover,
   .wa-float:hover,
+  .track-btn:hover:not(:disabled),
   .service-card:hover .card-arrow { transform: none; }
+  .track-progress-fill { transition: none; }
 }

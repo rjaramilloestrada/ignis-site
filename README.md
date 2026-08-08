@@ -93,10 +93,13 @@ intencionales de la versión original acordadas con el cliente:
    `category` (matchea los ids de las tabs de Servicios: `dev`/`ia`/`ent`) y
    `status` (`published`/`draft` — los drafts existen en código pero no llegan
    al DOM). La sección Casos filtra por la tab activa de Servicios (estado
-   compartido en `App.jsx`) y presenta cada categoría en un track horizontal
-   con `scroll-snap` nativo (sin flechas ni dots). Una categoría sin casos
-   publicados muestra un placeholder honesto. Para publicar un caso `draft`,
-   basta cambiar su `status` a `'published'`.
+   compartido en `App.jsx`) y presenta cada categoría en un carrusel
+   horizontal (`CasesCarousel.jsx`): `scroll-snap` nativo + drag con mouse,
+   flechas ←/→ (ocultas en móvil, donde manda el swipe), barra de progreso,
+   dimming de cards fuera de foco, teclado (←/→ con el track enfocado) y sin
+   auto-rotate. Una categoría sin casos publicados muestra un placeholder
+   honesto. Para publicar un caso `draft`, basta cambiar su `status` a
+   `'published'`.
 
 ### Fuego del hero (`FireCanvas.jsx`)
 
