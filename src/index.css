@@ -217,7 +217,7 @@ nav.scrolled {
   font-family: 'Inter', sans-serif;
   font-size: 17px;
   color: var(--body);
-  max-width: 520px;
+  max-width: 560px;
   line-height: 1.6;
   margin-bottom: 40px;
 }
@@ -314,6 +314,16 @@ nav.scrolled {
 .tab-btn:hover { color: var(--white); }
 .tab-btn.active { background: var(--accent); color: #000; }
 #tab-ent { grid-template-columns: repeat(2, 1fr); }
+
+.tab-subhead {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  color: var(--body);
+  text-align: center;
+  max-width: 640px;
+  margin: 40px auto -8px;
+  line-height: 1.6;
+}
 
 .card-grid {
   display: grid;
@@ -514,6 +524,31 @@ nav.scrolled {
   margin-top: 10px;
 }
 
+/* ===== OBJECTIONS ===== */
+.objections-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 56px;
+}
+.objection-card { background: var(--bg); padding: 40px; }
+.objection-q {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  color: var(--white);
+  line-height: 1.25;
+}
+.objection-a {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: var(--body);
+  line-height: 1.65;
+  margin-top: 14px;
+}
+
 /* ===== FINAL CTA ===== */
 .final-cta {
   border-top: 1px solid var(--border);
@@ -627,6 +662,7 @@ footer {
   .tab-btn { flex: 1; padding: 16px 12px; font-size: 11px; letter-spacing: 0.1em; }
   #tab-ent { grid-template-columns: 1fr; }
   .process-grid { grid-template-columns: 1fr; }
+  .objections-grid { grid-template-columns: 1fr; }
   .case-card { grid-template-columns: 1fr; }
   .case-info { padding: 32px; }
   .case-metrics { padding: 32px; border-left: none; border-top: 1px solid var(--border); }

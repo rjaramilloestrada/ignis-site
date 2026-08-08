@@ -28,6 +28,16 @@ export default function Services() {
         ))}
       </div>
 
+      {SERVICE_TABS.map(
+        (tab) =>
+          active === tab.id &&
+          tab.subhead && (
+            <p key={tab.id} className="tab-subhead">
+              {tab.subhead}
+            </p>
+          )
+      )}
+
       {SERVICE_TABS.map((tab) => (
         <div
           key={tab.id}

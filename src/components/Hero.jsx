@@ -11,14 +11,17 @@ export default function Hero() {
         <h1 className="hero-word">
           IGN<span className="ac">IS</span>
         </h1>
+        {/* BORRADOR: headline y body pendientes del OK final de Rafa (handoff ago 2026). */}
         <div className="hero-tagline">
-          <span>Automatización.</span>
-          <span className="ac">Desarrollo.</span>
-          <span>Resultados.</span>
+          <span>Tu equipo ya usa IA.</span>
+          <span>
+            Nosotros hacemos que la <span className="ac">use bien.</span>
+          </span>
         </div>
         <p className="hero-body">
-          Construimos el software y los agentes que transforman tu negocio. Desde
-          landing sites hasta bots de WhatsApp que trabajan 24/7.
+          Capacitamos y automatizamos con Claude dentro de los procesos reales de
+          tu empresa. Sin depender de tu área de tecnología. Sin depender de
+          nosotros después.
         </p>
         <div className="hero-ctas">
           <a
