@@ -1,49 +1,68 @@
-import { CASES } from '../data/cases.js'
+import { motion } from 'framer-motion'
+import { PUBLISHED_CASES } from '../data/cases.js'
+import { SERVICE_TABS } from '../data/services.js'
+import CasesCarousel from './CasesCarousel.jsx'
+import { fadeUp, stagger, VIEWPORT } from '../motion.js'
 
-export default function Cases() {
+// Los casos comparten estado con las tabs de Servicios (dos vías: cambiar la
+// tab arriba filtra aquí, y estos chips también cambian la tab). Todos los
+// grupos publicados quedan montados en el DOM; solo se ocultan con CSS.
+export default function Cases({ active, onChange }) {
   return (
     <section id="casos" className="section section-border">
-      <div className="sec-label">— Casos reales</div>
-      <h2 className="sec-headline">
-        Ya lo<span className="ac"> entregamos</span>
-      </h2>
-      <p className="sec-subtext">Proyectos en producción con resultados verificables.</p>
+      <motion.div
+        variants={stagger()}
+        initial="hidden"
+        whileInView="show"
+        viewport={VIEWPORT}
+      >
+        <motion.div variants={fadeUp} className="sec-label">
+          — Casos reales
+        </motion.div>
+        <motion.h2 variants={fadeUp} className="sec-headline">
+          Ya lo<span className="ac"> entregamos</span>
+        </motion.h2>
+        <motion.p variants={fadeUp} className="sec-subtext">
+          Proyectos en producción con resultados verificables.
+        </motion.p>
 
-      <div className="cases-wrap">
-        {CASES.map((c) => (
-          <div className="case-card" key={c.name}>
-            <div className="case-info">
-              <div className="case-type">{c.type}</div>
-              <h3 className="case-name">{c.name}</h3>
-              <p className="case-desc">{c.desc}</p>
-              <div className="case-stack">{c.stack}</div>
-            </div>
+        <motion.div variants={fadeUp} className="cases-filter" role="group" aria-label="Filtrar casos por servicio">
+          {SERVICE_TABS.map((tab) => {
+            const count = PUBLISHED_CASES.filter((c) => c.category === tab.id).length
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                className={`case-filter-btn ${active === tab.id ? 'active' : ''}`}
+                aria-pressed={active === tab.id}
+                onClick={() => onChange(tab.id)}
+              >
+                {tab.label}
+                <span className="case-filter-count">{count}</span>
+              </button>
+            )
+          })}
+        </motion.div>
+      </motion.div>
 
-            <div className="case-metrics">
-              {c.variant === 'metrics'
-                ? c.metrics.map((m) => (
-                    <div className="metric" key={m.lbl}>
-                      <div className="num">{m.num}</div>
-                      <div className="lbl">{m.lbl}</div>
-                    </div>
-                  ))
-                : (
-                    <>
-                      <div className="benefits-eyebrow">{c.benefitsEyebrow}</div>
-                      <ul className="case-benefits">
-                        {c.benefits.map((b, i) => (
-                          <li key={b}>
-                            <span className="b-idx">{String(i + 1).padStart(2, '0')}</span>
-                            <span>{b}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </>
-                  )}
-            </div>
+      {SERVICE_TABS.map((tab) => {
+        const cases = PUBLISHED_CASES.filter((c) => c.category === tab.id)
+        const isActive = active === tab.id
+        return (
+          <div
+            key={tab.id}
+            className={`cases-group ${isActive ? '' : 'cases-group-hidden'}`}
+          >
+            {cases.length > 0 ? (
+              <CasesCarousel label={tab.label} cases={cases} isActive={isActive} />
+            ) : (
+              <p className="cases-empty">
+                Primer caso de {tab.label} en camino.
+              </p>
+            )}
           </div>
-        ))}
-      </div>
+        )
+      })}
     </section>
   )
 }

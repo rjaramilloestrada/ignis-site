@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react'
 import { WHATSAPP_URL } from '../constants.js'
+import useActiveSection from '../hooks/useActiveSection.js'
 
 const LINKS = [
   { href: '#servicios', label: 'Servicios' },
   { href: '#casos', label: 'Casos' },
   { href: '#proceso', label: 'Proceso' },
 ]
+const SECTION_IDS = ['servicios', 'casos', 'proceso']
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const activeSection = useActiveSection(SECTION_IDS)
 
   // Estado de scroll: nav transparente → sólido tras 60px (igual que el prototipo).
   useEffect(() => {
@@ -50,7 +53,12 @@ export default function Nav() {
         <ul className="nav-links">
           {LINKS.map((l) => (
             <li key={l.href}>
-              <a href={l.href}>{l.label}</a>
+              <a
+                href={l.href}
+                className={activeSection === l.href.slice(1) ? 'active' : ''}
+              >
+                {l.label}
+              </a>
             </li>
           ))}
         </ul>

@@ -1,8 +1,96 @@
-// Servicios — 3 pestañas, copy exacto de project/ignis.html.
+// Servicios — 3 pestañas. Orden: IA Empresarial primero (default), luego
+// Agentes IA y Desarrollo Digital (handoff copy-ia-empresarial, ago 2026).
 // `gridId` reproduce los id del prototipo (#tab-dev / #tab-ia / #tab-ent),
 // donde #tab-ent usa una grilla de 2 columnas.
+// `subhead` (opcional) se muestra como sub-headline sobre los cards del tab activo.
 
 export const SERVICE_TABS = [
+  {
+    id: 'ent',
+    gridId: 'tab-ent',
+    label: 'IA Empresarial',
+    subhead: 'No es una demo — es tu equipo usando AI productivamente desde el primer día.',
+    services: [
+      {
+        tag: 'Adopción AI',
+        name: 'Claude para tu empresa',
+        desc: 'Integramos Claude dentro de los flujos de trabajo reales de tu empresa, con configuración, prompts y acompañamiento para tu equipo.',
+        benefits: [
+          'Diagnóstico de procesos con mayor retorno al automatizar',
+          'Configuración del entorno organizacional Claude Teams',
+          'Prompts y flujos diseñados para tu industria específica',
+          'Reducción de tiempo en tareas de documentación y comunicación',
+          'Marco de seguridad y uso responsable definido para tu equipo',
+        ],
+      },
+      {
+        tag: 'Capacitación corporativa',
+        name: 'Workshops de AI',
+        desc: 'Programa de capacitación para que tus equipos no técnicos dominen las herramientas de AI relevantes para su trabajo. Contenido diseñado para tu industria, no genérico.',
+        benefits: [
+          'Equipos operando con AI sin depender del área de tecnología',
+          'Curriculum estructurado por módulos según rol y función',
+          'Casos de uso reales de tu industria, no ejemplos abstractos',
+          'Materiales internos personalizados para tu empresa',
+          'Seguimiento post-capacitación incluido',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ia',
+    gridId: 'tab-ia',
+    label: 'Agentes IA',
+    services: [
+      {
+        tag: 'Atención 24/7',
+        name: 'Agente de WhatsApp',
+        desc: 'Un bot conectado a tu WhatsApp Business oficial que responde preguntas, califica prospectos y agenda citas mientras tú duermes.',
+        benefits: [
+          'Responde a leads en segundos, no en horas',
+          'Califica prospectos antes de llegar a tu equipo de ventas',
+          'Conectado a tu CRM y agenda',
+          'API oficial de Meta — sin riesgo de suspensión',
+        ],
+      },
+      {
+        tag: 'Conecta tus herramientas',
+        name: 'Automatizaciones',
+        desc: 'Workflows que conectan tu CRM, WhatsApp, correo y plataformas. Tareas repetitivas que se ejecutan solas, sin intervención humana.',
+        benefits: [
+          'Elimina trabajo manual repetitivo de tu equipo',
+          'Datos sincronizados entre plataformas en tiempo real',
+          'Alertas y reportes automáticos',
+          'Reduce errores en procesos críticos',
+        ],
+      },
+      {
+        tag: 'Prospectos calificados',
+        name: 'Lead Radar',
+        desc: 'Agente que monitorea fuentes digitales buscando personas que ya necesitan lo que tu empresa ofrece. El prospecto llega calificado a tu notificación.',
+        benefits: [
+          'Prospectos activos que ya buscan tu solución',
+          'Notificación inmediata cuando aparece un lead relevante',
+          'Ahorra horas de prospección manual cada semana',
+          'Escalable a múltiples fuentes simultáneas',
+        ],
+      },
+      {
+        tag: 'Enterprise',
+        name: 'Agente Autónomo',
+        desc: 'Un agente de IA personalizado con memoria, acceso a tus sistemas y capacidad de ejecutar tareas complejas de manera independiente. Tu fuerza de trabajo digital.',
+        benefits: [
+          'Opera con supervisión mínima',
+          'Accede a tus bases de datos, APIs y herramientas internas',
+          // BORRADOR pendiente de aprobación de Rafa (reemplaza "Aprende de tus
+          // procesos con el tiempo", que era una promesa abstracta).
+          'Memoria persistente: conserva el contexto de tu operación entre tareas',
+          // 4º beneficio (el prototipo lo tenía incompleto; redactado para cerrar la tarjeta).
+          'Reporta cada tarea que ejecuta',
+        ],
+      },
+    ],
+  },
   {
     id: 'dev',
     gridId: 'tab-dev',
@@ -61,89 +149,6 @@ export const SERVICE_TABS = [
           'Notificaciones push, pagos y funciones offline',
           'Proceso completo: concepto → publicación → usuarios',
           'Cumplimiento LOPDP para datos de usuarios',
-        ],
-      },
-    ],
-  },
-  {
-    id: 'ia',
-    gridId: 'tab-ia',
-    label: 'Agentes IA',
-    services: [
-      {
-        tag: 'Atención 24/7',
-        name: 'Agente de WhatsApp',
-        desc: 'Un bot conectado a tu WhatsApp Business oficial que responde preguntas, califica prospectos y agenda citas mientras tú duermes.',
-        benefits: [
-          'Responde a leads en segundos, no en horas',
-          'Califica prospectos antes de llegar a tu equipo de ventas',
-          'Conectado a tu CRM y agenda',
-          'API oficial de Meta — sin riesgo de suspensión',
-        ],
-      },
-      {
-        tag: 'Conecta tus herramientas',
-        name: 'Automatizaciones',
-        desc: 'Workflows que conectan tu CRM, WhatsApp, correo y plataformas. Tareas repetitivas que se ejecutan solas, sin intervención humana.',
-        benefits: [
-          'Elimina trabajo manual repetitivo de tu equipo',
-          'Datos sincronizados entre plataformas en tiempo real',
-          'Alertas y reportes automáticos',
-          'Reduce errores en procesos críticos',
-        ],
-      },
-      {
-        tag: 'Prospectos calificados',
-        name: 'Lead Radar',
-        desc: 'Agente que monitorea fuentes digitales buscando personas que ya necesitan lo que tu empresa ofrece. El prospecto llega calificado a tu notificación.',
-        benefits: [
-          'Prospectos activos que ya buscan tu solución',
-          'Notificación inmediata cuando aparece un lead relevante',
-          'Ahorra horas de prospección manual cada semana',
-          'Escalable a múltiples fuentes simultáneas',
-        ],
-      },
-      {
-        tag: 'Enterprise',
-        name: 'Agente Autónomo',
-        desc: 'Un agente de IA personalizado con memoria, acceso a tus sistemas y capacidad de ejecutar tareas complejas de manera independiente. Tu fuerza de trabajo digital.',
-        benefits: [
-          'Opera con supervisión mínima',
-          'Accede a tus bases de datos, APIs y herramientas internas',
-          'Aprende de tus procesos con el tiempo',
-          // 4º beneficio (el prototipo lo tenía incompleto; redactado para cerrar la tarjeta).
-          'Reporta cada tarea que ejecuta',
-        ],
-      },
-    ],
-  },
-  {
-    id: 'ent',
-    gridId: 'tab-ent',
-    label: 'IA Empresarial',
-    services: [
-      {
-        tag: 'Adopción AI',
-        name: 'Claude para tu empresa',
-        desc: 'Integramos Claude dentro de los flujos de trabajo reales de tu empresa. No es una demo — es tu equipo usando AI productivamente desde el primer día.',
-        benefits: [
-          'Diagnóstico de procesos con mayor retorno al automatizar',
-          'Configuración del entorno organizacional Claude Teams',
-          'Prompts y flujos diseñados para tu industria específica',
-          'Reducción de tiempo en tareas de documentación y comunicación',
-          'Marco de seguridad y uso responsable definido para tu equipo',
-        ],
-      },
-      {
-        tag: 'Capacitación corporativa',
-        name: 'Workshops de AI',
-        desc: 'Programa de capacitación para que tus equipos no técnicos dominen las herramientas de AI relevantes para su trabajo. Contenido diseñado para tu industria, no genérico.',
-        benefits: [
-          'Equipos operando con AI sin depender del área de tecnología',
-          'Curriculum estructurado por módulos según rol y función',
-          'Casos de uso reales de tu industria, no ejemplos abstractos',
-          'Materiales internos personalizados para tu empresa',
-          'Seguimiento post-capacitación incluido',
         ],
       },
     ],

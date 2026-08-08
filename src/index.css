@@ -68,6 +68,7 @@ nav.scrolled {
   list-style: none;
 }
 .nav-links a {
+  position: relative;
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   text-transform: uppercase;
@@ -76,7 +77,22 @@ nav.scrolled {
   text-decoration: none;
   transition: color 0.15s ease;
 }
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
 .nav-links a:hover { color: var(--white); }
+.nav-links a.active { color: var(--white); }
+.nav-links a:hover::after,
+.nav-links a.active::after { transform: scaleX(1); }
 .nav-cta {
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
@@ -87,10 +103,11 @@ nav.scrolled {
   background: transparent;
   padding: 11px 22px;
   text-decoration: none;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease,
+    transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
 }
-.nav-cta:hover { background: var(--accent); color: #000; }
+.nav-cta:hover { background: var(--accent); color: #000; transform: translateY(-2px); }
 
 /* Contenedor derecho del nav (CTA + hamburguesa) */
 .nav-right { display: flex; align-items: center; gap: 14px; }
@@ -165,6 +182,13 @@ nav.scrolled {
   height: 100%;
   z-index: 1;
 }
+@media (prefers-reduced-motion: no-preference) {
+  #fire-canvas { animation: canvas-fade 1.2s ease-out both; }
+}
+@keyframes canvas-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 .hero-vignette {
   position: absolute;
   inset: 0;
@@ -217,7 +241,7 @@ nav.scrolled {
   font-family: 'Inter', sans-serif;
   font-size: 17px;
   color: var(--body);
-  max-width: 520px;
+  max-width: 560px;
   line-height: 1.6;
   margin-bottom: 40px;
 }
@@ -315,6 +339,16 @@ nav.scrolled {
 .tab-btn.active { background: var(--accent); color: #000; }
 #tab-ent { grid-template-columns: repeat(2, 1fr); }
 
+.tab-subhead {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  color: var(--body);
+  text-align: center;
+  max-width: 640px;
+  margin: 40px auto -8px;
+  line-height: 1.6;
+}
+
 .card-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -323,7 +357,6 @@ nav.scrolled {
   border: 1px solid var(--border);
   margin-top: 48px;
 }
-.card-grid.hidden { display: none; }
 .service-card {
   background: var(--bg);
   padding: 32px;
@@ -347,9 +380,9 @@ nav.scrolled {
 .card-arrow {
   font-size: 18px;
   color: var(--muted);
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.service-card:hover .card-arrow { color: var(--accent); }
+.service-card:hover .card-arrow { color: var(--accent); transform: translate(4px, -4px); }
 .card-name {
   font-family: 'Montserrat', sans-serif;
   font-weight: 900;
@@ -381,22 +414,133 @@ nav.scrolled {
 .service-card:hover .card-benefits li::before { color: var(--white); }
 
 /* ===== CASES ===== */
-.cases-wrap {
-  margin-top: 56px;
-  border: 1px solid var(--border);
-  background: var(--border);
+/* Un grupo por categoría de servicio; solo el de la tab activa es visible.
+   Todos quedan en el DOM (SEO/accesibilidad) — se ocultan con CSS. */
+.cases-group { margin-top: 32px; }
+.cases-group-hidden { display: none; }
+/* Entrada del grupo al cambiar de tab (display:none→block reinicia la animación). */
+@media (prefers-reduced-motion: no-preference) {
+  .cases-group { animation: group-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; }
+}
+@keyframes group-in {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: none; }
+}
+/* Chips de filtro por servicio dentro de la sección Casos (sincronizados
+   con las tabs de Servicios en ambas direcciones). */
+.cases-filter {
   display: flex;
-  flex-direction: column;
-  gap: 1px;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 36px;
+}
+.case-filter-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 12px 18px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.case-filter-btn:hover { color: var(--white); border-color: var(--muted); }
+.case-filter-btn.active { background: var(--accent); border-color: var(--accent); color: #000; }
+.case-filter-count {
+  font-size: 10px;
+  color: var(--accent);
+}
+.case-filter-btn.active .case-filter-count { color: #000; }
+.case-filter-btn:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; }
+.cases-track-head {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+.track-controls { display: flex; gap: 8px; }
+.track-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.track-btn:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
+.track-btn:disabled { opacity: 0.3; cursor: default; }
+.track-btn:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; }
+/* Carrusel: scroll-snap nativo + drag con mouse. Sin auto-rotate. */
+.cases-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.cases-track::-webkit-scrollbar { display: none; }
+.cases-track.track-multi { cursor: grab; }
+.cases-track.dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+}
+.cases-track:focus-visible { outline: 1px solid var(--border); outline-offset: 6px; }
+.case-slide {
+  flex: 0 0 88%;
+  scroll-snap-align: start;
+  display: flex;
+}
+.case-slide:only-child { flex-basis: 100%; }
+/* Card fuera de foco (menos del 55% visible) se atenúa. */
+@media (prefers-reduced-motion: no-preference) {
+  .case-slide { transition: opacity 0.35s ease; }
+  .case-slide.is-off { opacity: 0.45; }
+}
+.track-progress {
+  height: 2px;
+  background: var(--border);
+  margin-top: 20px;
+  overflow: hidden;
+}
+.track-progress-fill {
+  height: 100%;
+  width: 100%;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.15s linear;
 }
 .case-card {
+  width: 100%;
   background: var(--bg);
   display: grid;
   grid-template-columns: 70% 30%;
-  border-left: 2px solid transparent;
+  border: 1px solid var(--border);
+  border-left-width: 2px;
   transition: border-color 0.2s ease, background 0.2s ease;
 }
-.case-card:hover { border-left: 2px solid var(--accent); background: #0F0F0F; }
+.case-card:hover { border-left-color: var(--accent); background: #0F0F0F; }
+/* Card sin columna de métricas/beneficios (p. ej. workshops sin cifras). */
+.case-card-solo { grid-template-columns: 1fr; }
+.case-card-solo .case-desc { max-width: 720px; }
+/* Placeholder honesto cuando una categoría aún no tiene casos publicados. */
+.cases-empty {
+  border: 1px solid var(--border);
+  padding: 40px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
 .case-info { padding: 48px; }
 .case-type {
   font-family: 'JetBrains Mono', monospace;
@@ -442,6 +586,7 @@ nav.scrolled {
   font-size: clamp(1.5rem, 3vw, 2.2rem);
   color: var(--accent);
   line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 .metric .lbl {
   font-family: 'JetBrains Mono', monospace;
@@ -484,6 +629,7 @@ nav.scrolled {
 
 /* ===== PROCESS ===== */
 .process-grid {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1px;
@@ -491,14 +637,34 @@ nav.scrolled {
   border: 1px solid var(--border);
   margin-top: 56px;
 }
+/* Línea de acento que se "enciende" de izquierda a derecha al entrar en viewport. */
+.process-grid::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+  z-index: 1;
+}
+#proceso.ignited .process-grid::before { transform: scaleX(1); }
 .process-step { background: var(--bg); padding: 40px; }
 .process-num {
   font-family: 'Montserrat', sans-serif;
   font-weight: 900;
   font-size: 4rem;
-  color: var(--accent);
+  color: var(--muted);
   line-height: 1;
+  transition: color 0.45s ease;
 }
+#proceso.ignited .process-step:nth-child(1) .process-num { color: var(--accent); transition-delay: 0.45s; }
+#proceso.ignited .process-step:nth-child(2) .process-num { color: var(--accent); transition-delay: 0.55s; }
+#proceso.ignited .process-step:nth-child(3) .process-num { color: var(--accent); transition-delay: 0.65s; }
+#proceso.ignited .process-step:nth-child(4) .process-num { color: var(--accent); transition-delay: 0.75s; }
 .process-title {
   font-family: 'Montserrat', sans-serif;
   font-weight: 900;
@@ -512,6 +678,31 @@ nav.scrolled {
   color: var(--body);
   line-height: 1.65;
   margin-top: 10px;
+}
+
+/* ===== OBJECTIONS ===== */
+.objections-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 56px;
+}
+.objection-card { background: var(--bg); padding: 40px; }
+.objection-q {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  color: var(--white);
+  line-height: 1.25;
+}
+.objection-a {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: var(--body);
+  line-height: 1.65;
+  margin-top: 14px;
 }
 
 /* ===== FINAL CTA ===== */
@@ -547,6 +738,7 @@ nav.scrolled {
   line-height: 1.6;
 }
 .btn-final {
+  position: relative;
   font-family: 'Montserrat', sans-serif;
   font-weight: 900;
   font-size: 14px;
@@ -559,6 +751,22 @@ nav.scrolled {
   margin-top: 48px;
   box-shadow: 0 0 40px rgba(255, 68, 0, 0.4);
   transition: opacity 0.15s ease, box-shadow 0.15s ease;
+}
+/* Pulso de glow: solo anima opacity de un pseudo-elemento (compositor-friendly). */
+.btn-final::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: 0 0 60px rgba(255, 68, 0, 0.55);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .btn-final::after { animation: cta-pulse 2.8s ease-in-out infinite; }
+}
+@keyframes cta-pulse {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
 }
 .btn-final:hover { opacity: 0.9; box-shadow: 0 0 60px rgba(255, 68, 0, 0.6); }
 
@@ -611,6 +819,15 @@ footer {
 }
 .wa-float:hover { transform: scale(1.08); }
 .wa-float svg { width: 26px; height: 26px; fill: #fff; }
+/* Entrada "pop" tras la secuencia del hero. `backwards` (no `both`) para que
+   el transform del keyframe no bloquee el scale del hover al terminar. */
+@media (prefers-reduced-motion: no-preference) {
+  .wa-float { animation: wa-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1.4s backwards; }
+}
+@keyframes wa-pop {
+  from { opacity: 0; transform: scale(0.3); }
+  to { opacity: 1; transform: scale(1); }
+}
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
@@ -627,7 +844,12 @@ footer {
   .tab-btn { flex: 1; padding: 16px 12px; font-size: 11px; letter-spacing: 0.1em; }
   #tab-ent { grid-template-columns: 1fr; }
   .process-grid { grid-template-columns: 1fr; }
+  .objections-grid { grid-template-columns: 1fr; }
   .case-card { grid-template-columns: 1fr; }
+  .case-slide { flex-basis: 92%; }
+  .cases-track { gap: 12px; }
+  .cases-track.track-multi { cursor: default; }
+  .track-controls { display: none; }
   .case-info { padding: 32px; }
   .case-metrics { padding: 32px; border-left: none; border-top: 1px solid var(--border); }
   .hero-content { padding-top: 25vh; }
@@ -637,4 +859,15 @@ footer {
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  /* Las animaciones CSS nuevas viven dentro de @media (no-preference), así que
+     aquí solo hace falta neutralizar los estados que dependen de JS/transiciones. */
+  .btn-final::after { animation: none; opacity: 0; }
+  .process-grid::before { display: none; }
+  .process-num { color: var(--accent) !important; transition: none !important; }
+  .nav-links a::after { transition: none; }
+  .nav-cta:hover,
+  .wa-float:hover,
+  .track-btn:hover:not(:disabled),
+  .service-card:hover .card-arrow { transform: none; }
+  .track-progress-fill { transition: none; }
 }
