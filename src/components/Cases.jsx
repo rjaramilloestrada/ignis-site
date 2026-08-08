@@ -4,9 +4,10 @@ import { SERVICE_TABS } from '../data/services.js'
 import CasesCarousel from './CasesCarousel.jsx'
 import { fadeUp, stagger, VIEWPORT } from '../motion.js'
 
-// Los casos se filtran por la misma tab activa de Servicios. Todos los grupos
-// quedan montados en el DOM (SEO/accesibilidad); solo se ocultan con CSS.
-export default function Cases({ active }) {
+// Los casos comparten estado con las tabs de Servicios (dos vías: cambiar la
+// tab arriba filtra aquí, y estos chips también cambian la tab). Todos los
+// grupos publicados quedan montados en el DOM; solo se ocultan con CSS.
+export default function Cases({ active, onChange }) {
   return (
     <section id="casos" className="section section-border">
       <motion.div
@@ -24,6 +25,24 @@ export default function Cases({ active }) {
         <motion.p variants={fadeUp} className="sec-subtext">
           Proyectos en producción con resultados verificables.
         </motion.p>
+
+        <motion.div variants={fadeUp} className="cases-filter" role="group" aria-label="Filtrar casos por servicio">
+          {SERVICE_TABS.map((tab) => {
+            const count = PUBLISHED_CASES.filter((c) => c.category === tab.id).length
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                className={`case-filter-btn ${active === tab.id ? 'active' : ''}`}
+                aria-pressed={active === tab.id}
+                onClick={() => onChange(tab.id)}
+              >
+                {tab.label}
+                <span className="case-filter-count">{count}</span>
+              </button>
+            )
+          })}
+        </motion.div>
       </motion.div>
 
       {SERVICE_TABS.map((tab) => {
@@ -37,14 +56,9 @@ export default function Cases({ active }) {
             {cases.length > 0 ? (
               <CasesCarousel label={tab.label} cases={cases} isActive={isActive} />
             ) : (
-              <>
-                <div className="cases-track-head">
-                  <div className="cases-context-label">— {tab.label}</div>
-                </div>
-                <p className="cases-empty">
-                  Primer caso de {tab.label} en camino.
-                </p>
-              </>
+              <p className="cases-empty">
+                Primer caso de {tab.label} en camino.
+              </p>
             )}
           </div>
         )

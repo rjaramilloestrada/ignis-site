@@ -67,6 +67,15 @@ export const CASES = [
     name: 'Agensitur',
     desc: 'Taller de adopción de IA para equipo de agencia de viajes. Fundamentos de Claude Chat y Claude Cowork en formato intensivo de una sola sesión, con preguntas de discovery preparadas específicamente para el flujo de trabajo de la industria de turismo.',
     stack: 'Claude Chat · Claude Cowork',
+    variant: 'benefits',
+    // Hechos verificados del handoff (sin cifras inventadas). Si hay una
+    // calificación o resultado medible confirmado, reemplazar aquí.
+    benefitsEyebrow: '— Lo entregado',
+    benefits: [
+      'Workshop intensivo de 4 horas en una sola sesión',
+      'Fundamentos de Claude Chat y Claude Cowork para todo el equipo',
+      'Discovery preparado específicamente para el flujo de una agencia de viajes',
+    ],
   },
   {
     // NO cambiar a 'published' sin confirmación explícita de Rafa: las

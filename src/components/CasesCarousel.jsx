@@ -151,9 +151,8 @@ export default function CasesCarousel({ label, cases, isActive }) {
 
   return (
     <>
-      <div className="cases-track-head">
-        <div className="cases-context-label">— {label}</div>
-        {multi && (
+      {multi && (
+        <div className="cases-track-head">
           <div className="track-controls">
             <button
               type="button"
@@ -174,8 +173,8 @@ export default function CasesCarousel({ label, cases, isActive }) {
               →
             </button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <motion.div
         className={`cases-track ${multi ? 'track-multi' : ''}`}

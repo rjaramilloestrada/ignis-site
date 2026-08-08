@@ -416,7 +416,7 @@ nav.scrolled {
 /* ===== CASES ===== */
 /* Un grupo por categoría de servicio; solo el de la tab activa es visible.
    Todos quedan en el DOM (SEO/accesibilidad) — se ocultan con CSS. */
-.cases-group { margin-top: 48px; }
+.cases-group { margin-top: 32px; }
 .cases-group-hidden { display: none; }
 /* Entrada del grupo al cambiar de tab (display:none→block reinicia la animación). */
 @media (prefers-reduced-motion: no-preference) {
@@ -426,18 +426,42 @@ nav.scrolled {
   from { opacity: 0; transform: translateX(24px); }
   to { opacity: 1; transform: none; }
 }
+/* Chips de filtro por servicio dentro de la sección Casos (sincronizados
+   con las tabs de Servicios en ambas direcciones). */
+.cases-filter {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 36px;
+}
+.case-filter-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 12px 18px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.case-filter-btn:hover { color: var(--white); border-color: var(--muted); }
+.case-filter-btn.active { background: var(--accent); border-color: var(--accent); color: #000; }
+.case-filter-count {
+  font-size: 10px;
+  color: var(--accent);
+}
+.case-filter-btn.active .case-filter-count { color: #000; }
+.case-filter-btn:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; }
 .cases-track-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-bottom: 16px;
-}
-.cases-context-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.25em;
 }
 .track-controls { display: flex; gap: 8px; }
 .track-btn {

@@ -21,7 +21,7 @@ export default function App() {
       <main>
         <Hero />
         <Services active={activeTab} onChange={setActiveTab} />
-        <Cases active={activeTab} />
+        <Cases active={activeTab} onChange={setActiveTab} />
         <Process />
         <Objections />
         <FinalCta />
