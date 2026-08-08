@@ -1,10 +1,9 @@
-import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { SERVICE_TABS } from '../data/services.js'
 import { fadeUp, stagger, VIEWPORT } from '../motion.js'
 
-export default function Services() {
-  const [active, setActive] = useState(SERVICE_TABS[0].id)
+// El estado de la tab activa vive en App (compartido con Casos Reales).
+export default function Services({ active, onChange }) {
   const activeTab = SERVICE_TABS.find((tab) => tab.id === active)
 
   return (
@@ -33,7 +32,7 @@ export default function Services() {
             key={tab.id}
             type="button"
             className={`tab-btn ${active === tab.id ? 'active' : ''}`}
-            onClick={() => setActive(tab.id)}
+            onClick={() => onChange(tab.id)}
           >
             {tab.label}
           </button>

@@ -40,7 +40,8 @@ ignis-site/
     │   └── useActiveSection.js  IntersectionObserver → link activo del nav
     ├── data/
     │   ├── services.js      3 tabs: IA Empresarial / Agentes IA / Desarrollo Digital
-    │   ├── cases.js         Casos reales: PULSE, Glipy, Grupo Gráfico Abad
+    │   ├── cases.js         Casos reales con categoría (dev/ia/ent) y status
+    │   │                    published/draft — los drafts no se renderizan
     │   ├── objections.js    Bloque de objeciones (3 Q&A, copy del handoff)
     │   └── process.js       Proceso en 4 pasos
     └── components/
@@ -48,7 +49,8 @@ ignis-site/
         ├── Hero.jsx         Wordmark IGNIS + tagline + CTAs sobre el fuego
         ├── FireCanvas.jsx   Fuego de glifos monoespaciados en Canvas 2D vanilla
         ├── Services.jsx     3 tabs + tarjetas de servicio (AnimatePresence)
-        ├── Cases.jsx        Casos con métricas animadas / beneficios (grid 70/30)
+        ├── Cases.jsx        Casos filtrados por la tab activa de Servicios,
+        │                    scroll-snap horizontal, placeholder si no hay casos
         ├── CountUp.jsx      Count-up de métricas ("$2,500+", "< 10s", "26 pts")
         ├── Process.jsx      Cómo trabajamos (números que se "encienden")
         ├── Objections.jsx   Preguntas directas antes del CTA
@@ -87,6 +89,14 @@ intencionales de la versión original acordadas con el cliente:
    transform/opacity. Todo respeta `prefers-reduced-motion` (vía
    `MotionConfig reducedMotion="user"` + bloque CSS) — con motion reducido el
    contenido aparece sin desplazamientos y las métricas muestran su valor final.
+3. **Casos Reales dinámicos**: los casos viven en `src/data/cases.js` con
+   `category` (matchea los ids de las tabs de Servicios: `dev`/`ia`/`ent`) y
+   `status` (`published`/`draft` — los drafts existen en código pero no llegan
+   al DOM). La sección Casos filtra por la tab activa de Servicios (estado
+   compartido en `App.jsx`) y presenta cada categoría en un track horizontal
+   con `scroll-snap` nativo (sin flechas ni dots). Una categoría sin casos
+   publicados muestra un placeholder honesto. Para publicar un caso `draft`,
+   basta cambiar su `status` a `'published'`.
 
 ### Fuego del hero (`FireCanvas.jsx`)
 
