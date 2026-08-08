@@ -1,17 +1,38 @@
+import { motion } from 'framer-motion'
 import { CASES } from '../data/cases.js'
+import CountUp from './CountUp.jsx'
+import { fadeUp, stagger, VIEWPORT } from '../motion.js'
 
 export default function Cases() {
   return (
     <section id="casos" className="section section-border">
-      <div className="sec-label">— Casos reales</div>
-      <h2 className="sec-headline">
-        Ya lo<span className="ac"> entregamos</span>
-      </h2>
-      <p className="sec-subtext">Proyectos en producción con resultados verificables.</p>
+      <motion.div
+        variants={stagger()}
+        initial="hidden"
+        whileInView="show"
+        viewport={VIEWPORT}
+      >
+        <motion.div variants={fadeUp} className="sec-label">
+          — Casos reales
+        </motion.div>
+        <motion.h2 variants={fadeUp} className="sec-headline">
+          Ya lo<span className="ac"> entregamos</span>
+        </motion.h2>
+        <motion.p variants={fadeUp} className="sec-subtext">
+          Proyectos en producción con resultados verificables.
+        </motion.p>
+      </motion.div>
 
       <div className="cases-wrap">
         {CASES.map((c) => (
-          <div className="case-card" key={c.name}>
+          <motion.div
+            className="case-card"
+            key={c.name}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
+            viewport={VIEWPORT}
+          >
             <div className="case-info">
               <div className="case-type">{c.type}</div>
               <h3 className="case-name">{c.name}</h3>
@@ -23,7 +44,7 @@ export default function Cases() {
               {c.variant === 'metrics'
                 ? c.metrics.map((m) => (
                     <div className="metric" key={m.lbl}>
-                      <div className="num">{m.num}</div>
+                      <CountUp value={m.num} />
                       <div className="lbl">{m.lbl}</div>
                     </div>
                   ))
@@ -41,7 +62,7 @@ export default function Cases() {
                     </>
                   )}
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>

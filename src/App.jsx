@@ -1,3 +1,4 @@
+import { MotionConfig } from 'framer-motion'
 import Nav from './components/Nav.jsx'
 import Hero from './components/Hero.jsx'
 import Services from './components/Services.jsx'
@@ -10,7 +11,7 @@ import WhatsappFloat from './components/WhatsappFloat.jsx'
 
 export default function App() {
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <Nav />
       <main>
         <Hero />
@@ -22,6 +23,6 @@ export default function App() {
       </main>
       <Footer />
       <WhatsappFloat />
-    </>
+    </MotionConfig>
   )
 }

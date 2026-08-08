@@ -1,21 +1,32 @@
+import { motion } from 'framer-motion'
 import { OBJECTIONS } from '../data/objections.js'
+import { fadeUp, stagger, VIEWPORT } from '../motion.js'
 
 export default function Objections() {
   return (
-    <section id="objeciones" className="section section-border">
-      <div className="sec-label">— Preguntas directas</div>
-      <h2 className="sec-headline">
+    <motion.section
+      id="objeciones"
+      className="section section-border"
+      variants={stagger()}
+      initial="hidden"
+      whileInView="show"
+      viewport={VIEWPORT}
+    >
+      <motion.div variants={fadeUp} className="sec-label">
+        — Preguntas directas
+      </motion.div>
+      <motion.h2 variants={fadeUp} className="sec-headline">
         Lo que te<span className="ac"> estás preguntando</span>
-      </h2>
+      </motion.h2>
 
       <div className="objections-grid">
         {OBJECTIONS.map((o) => (
-          <div className="objection-card" key={o.q}>
+          <motion.div className="objection-card" key={o.q} variants={fadeUp}>
             <h3 className="objection-q">{o.q}</h3>
             <p className="objection-a">{o.a}</p>
-          </div>
+          </motion.div>
         ))}
       </div>
-    </section>
+    </motion.section>
   )
 }

@@ -68,6 +68,7 @@ nav.scrolled {
   list-style: none;
 }
 .nav-links a {
+  position: relative;
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   text-transform: uppercase;
@@ -76,7 +77,22 @@ nav.scrolled {
   text-decoration: none;
   transition: color 0.15s ease;
 }
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
 .nav-links a:hover { color: var(--white); }
+.nav-links a.active { color: var(--white); }
+.nav-links a:hover::after,
+.nav-links a.active::after { transform: scaleX(1); }
 .nav-cta {
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
@@ -87,10 +103,11 @@ nav.scrolled {
   background: transparent;
   padding: 11px 22px;
   text-decoration: none;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease,
+    transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
 }
-.nav-cta:hover { background: var(--accent); color: #000; }
+.nav-cta:hover { background: var(--accent); color: #000; transform: translateY(-2px); }
 
 /* Contenedor derecho del nav (CTA + hamburguesa) */
 .nav-right { display: flex; align-items: center; gap: 14px; }
@@ -164,6 +181,13 @@ nav.scrolled {
   width: 100%;
   height: 100%;
   z-index: 1;
+}
+@media (prefers-reduced-motion: no-preference) {
+  #fire-canvas { animation: canvas-fade 1.2s ease-out both; }
+}
+@keyframes canvas-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 .hero-vignette {
   position: absolute;
@@ -333,7 +357,6 @@ nav.scrolled {
   border: 1px solid var(--border);
   margin-top: 48px;
 }
-.card-grid.hidden { display: none; }
 .service-card {
   background: var(--bg);
   padding: 32px;
@@ -357,9 +380,9 @@ nav.scrolled {
 .card-arrow {
   font-size: 18px;
   color: var(--muted);
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.service-card:hover .card-arrow { color: var(--accent); }
+.service-card:hover .card-arrow { color: var(--accent); transform: translate(4px, -4px); }
 .card-name {
   font-family: 'Montserrat', sans-serif;
   font-weight: 900;
@@ -452,6 +475,7 @@ nav.scrolled {
   font-size: clamp(1.5rem, 3vw, 2.2rem);
   color: var(--accent);
   line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 .metric .lbl {
   font-family: 'JetBrains Mono', monospace;
@@ -494,6 +518,7 @@ nav.scrolled {
 
 /* ===== PROCESS ===== */
 .process-grid {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1px;
@@ -501,14 +526,34 @@ nav.scrolled {
   border: 1px solid var(--border);
   margin-top: 56px;
 }
+/* Línea de acento que se "enciende" de izquierda a derecha al entrar en viewport. */
+.process-grid::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+  z-index: 1;
+}
+#proceso.ignited .process-grid::before { transform: scaleX(1); }
 .process-step { background: var(--bg); padding: 40px; }
 .process-num {
   font-family: 'Montserrat', sans-serif;
   font-weight: 900;
   font-size: 4rem;
-  color: var(--accent);
+  color: var(--muted);
   line-height: 1;
+  transition: color 0.45s ease;
 }
+#proceso.ignited .process-step:nth-child(1) .process-num { color: var(--accent); transition-delay: 0.45s; }
+#proceso.ignited .process-step:nth-child(2) .process-num { color: var(--accent); transition-delay: 0.55s; }
+#proceso.ignited .process-step:nth-child(3) .process-num { color: var(--accent); transition-delay: 0.65s; }
+#proceso.ignited .process-step:nth-child(4) .process-num { color: var(--accent); transition-delay: 0.75s; }
 .process-title {
   font-family: 'Montserrat', sans-serif;
   font-weight: 900;
@@ -582,6 +627,7 @@ nav.scrolled {
   line-height: 1.6;
 }
 .btn-final {
+  position: relative;
   font-family: 'Montserrat', sans-serif;
   font-weight: 900;
   font-size: 14px;
@@ -594,6 +640,22 @@ nav.scrolled {
   margin-top: 48px;
   box-shadow: 0 0 40px rgba(255, 68, 0, 0.4);
   transition: opacity 0.15s ease, box-shadow 0.15s ease;
+}
+/* Pulso de glow: solo anima opacity de un pseudo-elemento (compositor-friendly). */
+.btn-final::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: 0 0 60px rgba(255, 68, 0, 0.55);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .btn-final::after { animation: cta-pulse 2.8s ease-in-out infinite; }
+}
+@keyframes cta-pulse {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
 }
 .btn-final:hover { opacity: 0.9; box-shadow: 0 0 60px rgba(255, 68, 0, 0.6); }
 
@@ -646,6 +708,15 @@ footer {
 }
 .wa-float:hover { transform: scale(1.08); }
 .wa-float svg { width: 26px; height: 26px; fill: #fff; }
+/* Entrada "pop" tras la secuencia del hero. `backwards` (no `both`) para que
+   el transform del keyframe no bloquee el scale del hover al terminar. */
+@media (prefers-reduced-motion: no-preference) {
+  .wa-float { animation: wa-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1.4s backwards; }
+}
+@keyframes wa-pop {
+  from { opacity: 0; transform: scale(0.3); }
+  to { opacity: 1; transform: scale(1); }
+}
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
@@ -673,4 +744,13 @@ footer {
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  /* Las animaciones CSS nuevas viven dentro de @media (no-preference), así que
+     aquí solo hace falta neutralizar los estados que dependen de JS/transiciones. */
+  .btn-final::after { animation: none; opacity: 0; }
+  .process-grid::before { display: none; }
+  .process-num { color: var(--accent) !important; transition: none !important; }
+  .nav-links a::after { transition: none; }
+  .nav-cta:hover,
+  .wa-float:hover,
+  .service-card:hover .card-arrow { transform: none; }
 }
