@@ -2,15 +2,16 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { animate, useInView, useReducedMotion } from 'framer-motion'
 import { EASE } from '../motion.js'
 
-// Anima métricas tipo "$2,500+", "< 10s", "26 pts" contando desde 0.
-// Valores sin dígitos ("LOPDP", "Freemium") se renderizan estáticos.
+// Anima métricas tipo "$2,500+", "< 10s", "26 pts", "10/10" contando desde 0.
+// Valores sin dígitos ("LOPDP", "Freemium") o con palabra antes del número
+// ("Fase 2") se renderizan estáticos.
 export default function CountUp({ value }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '0px 0px -10% 0px' })
   const reduced = useReducedMotion()
 
   const parsed = useMemo(() => {
-    const m = /^([^\d]*)([\d.,]+)([^\d]*)$/.exec(value)
+    const m = /^([^\dA-Za-z]*)([\d.,]+)([^\d]*)$/.exec(value)
     if (!m) return null
     return {
       prefix: m[1],

@@ -1,68 +1,70 @@
-import { motion } from 'framer-motion'
-import { PUBLISHED_CASES } from '../data/cases.js'
-import { SERVICE_TABS } from '../data/services.js'
+import { LayoutGroup, motion } from 'framer-motion'
+import Reveal from './Reveal.jsx'
+import SectionHead from './SectionHead.jsx'
+import EmberLine from './motif/EmberLine.jsx'
 import CasesCarousel from './CasesCarousel.jsx'
-import { fadeUp, stagger, VIEWPORT } from '../motion.js'
+import { casesForFilter } from '../data/cases.js'
+import { CASE_FILTERS } from '../data/ladder.js'
+import { fadeUp } from '../motion.js'
 
-// Los casos comparten estado con las tabs de Servicios (dos vías: cambiar la
-// tab arriba filtra aquí, y estos chips también cambian la tab). Todos los
-// grupos publicados quedan montados en el DOM; solo se ocultan con CSS.
-export default function Cases({ active, onChange }) {
+// Casos filtrados por paso de la escalera. El filtro vive en App para que
+// los enlaces "Ver casos de …" de la escalera lo preseleccionen. Por defecto
+// 'todos': todos los casos publicados están en el DOM al primer paint.
+export default function Cases({ filter, onChange }) {
+  const cases = casesForFilter(filter)
+  const activeLabel = CASE_FILTERS.find((f) => f.id === filter)?.label ?? 'Todos'
+
   return (
-    <section id="casos" className="section section-border">
-      <motion.div
-        variants={stagger()}
-        initial="hidden"
-        whileInView="show"
-        viewport={VIEWPORT}
-      >
-        <motion.div variants={fadeUp} className="sec-label">
-          — Casos reales
-        </motion.div>
-        <motion.h2 variants={fadeUp} className="sec-headline">
-          Ya lo<span className="ac"> entregamos</span>
-        </motion.h2>
-        <motion.p variants={fadeUp} className="sec-subtext">
-          Proyectos en producción con resultados verificables.
-        </motion.p>
+    <Reveal as="section" id="casos" className="section section-cases" data-texture="true">
+      <EmberLine />
+      <SectionHead
+        label="— Casos reales"
+        lines={['Ya lo', <span className="ac ac-burn">entregamos.</span>]}
+        subtext="Taller y software en producción, en cinco industrias. Dos casos van sin nombre por confidencialidad: los datos son reales."
+      />
 
-        <motion.div variants={fadeUp} className="cases-filter" role="group" aria-label="Filtrar casos por servicio">
-          {SERVICE_TABS.map((tab) => {
-            const count = PUBLISHED_CASES.filter((c) => c.category === tab.id).length
+      <LayoutGroup id="cases-filter">
+        <motion.div
+          variants={fadeUp}
+          className="cases-filter"
+          role="group"
+          aria-label="Filtrar casos por paso de la escalera"
+        >
+          {CASE_FILTERS.map((f) => {
+            const count = casesForFilter(f.id).length
+            const active = filter === f.id
             return (
               <button
-                key={tab.id}
+                key={f.id}
                 type="button"
-                className={`case-filter-btn ${active === tab.id ? 'active' : ''}`}
-                aria-pressed={active === tab.id}
-                onClick={() => onChange(tab.id)}
+                className={`case-filter-btn ${active ? 'active' : ''}`}
+                aria-pressed={active}
+                onClick={() => onChange(f.id)}
               >
-                {tab.label}
-                <span className="case-filter-count">{count}</span>
+                {active && (
+                  <motion.span
+                    className="case-filter-pill"
+                    layoutId="cases-pill"
+                    transition={{ type: 'spring', stiffness: 400, damping: 34 }}
+                  />
+                )}
+                <span className="case-filter-text">
+                  {f.label}
+                  <span className="case-filter-count">{String(count).padStart(2, '0')}</span>
+                </span>
               </button>
             )
           })}
         </motion.div>
-      </motion.div>
+      </LayoutGroup>
+      <motion.p variants={fadeUp} className="cases-note">
+        ¿Y la Auditoría? Es el paso 01 y su entregable es el diagnóstico. Aquí mostramos lo que se
+        construye después.
+      </motion.p>
 
-      {SERVICE_TABS.map((tab) => {
-        const cases = PUBLISHED_CASES.filter((c) => c.category === tab.id)
-        const isActive = active === tab.id
-        return (
-          <div
-            key={tab.id}
-            className={`cases-group ${isActive ? '' : 'cases-group-hidden'}`}
-          >
-            {cases.length > 0 ? (
-              <CasesCarousel label={tab.label} cases={cases} isActive={isActive} />
-            ) : (
-              <p className="cases-empty">
-                Primer caso de {tab.label} en camino.
-              </p>
-            )}
-          </div>
-        )
-      })}
-    </section>
+      <div className="cases-group" key={filter}>
+        <CasesCarousel label={activeLabel} cases={cases} isActive />
+      </div>
+    </Reveal>
   )
 }
