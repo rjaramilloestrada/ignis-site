@@ -1344,6 +1344,16 @@ footer {
   letter-spacing: 0.15em;
 }
 .foot-right { text-transform: none; letter-spacing: 0.05em; }
+.foot-links { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: center; }
+.foot-links a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--fs-0);
+  color: var(--ink-3);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  transition: color var(--dur-xs) ease;
+}
+.foot-links a:hover, .foot-links a:focus-visible { color: var(--ink-1); }
 
 /* ---------- FLOATING WHATSAPP ---------- */
 .wa-float {
